@@ -25,7 +25,7 @@ if (exist) {
         }
     }
 } else {
-    fs.openSync(filePath, 777, (err) => {
+    fs.openSync(filePath, 'w', (err) => {
         throw err
     })
 }
