@@ -21,7 +21,7 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-let PORT = process.env.PORT || 3000
+let PORT = process.env.PORT || 1234
 
 app.post('/api/user/login', (req, res) => {
     let { username, password } = req.body
@@ -83,11 +83,20 @@ app.post('/api/posts', (req, res) => {
 
 app.get('/api/posts/:id', (req, res) => {
     let { id } = req.params
+    let forsend;
     client.query('SELECT * FROM post WHERE id=$1', [id], (err, data) => {
         if (err) {
             console.log(err.stack)
         } else {
-            res.json(data.rows[0])
+            forsend = data.rows[0]
+        }
+    })
+    client.query('SELECT * FROM comment WHERE post_id=$1', [id], (err, data) => {
+        if (err) {
+            console.log(err.stack)
+        } else {
+            console.log(data.rows)
+            res.json({...forsend,comment:[...data.rows]})
         }
     })
 })
