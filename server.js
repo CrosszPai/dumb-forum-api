@@ -42,7 +42,7 @@ app.post('/api/user/login', (req, res) => {
                 res.status(401).send('Unauthorized')
             }
             else {
-                res.status(401).send('Unauthorized')
+                res.status(202).send('success')
             }
         }
     })
