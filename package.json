@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "license": "MIT",
-  "script":{
+  "scripts":{
     "start":"node server"
   },
   "dependencies": {
