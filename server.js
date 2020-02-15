@@ -1,8 +1,9 @@
 let express = require('express')
-let fs = require('fs')
 let cors = require('cors')
-let nanoid = require('nanoid')
-let path = require('path')
+
+
+const PORT = process.env.PORT || 1234
+
 
 const { Client } = require('pg')
 const client = new Client({
@@ -21,8 +22,6 @@ let app = express()
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-
-let PORT = process.env.PORT || 1234
 
 app.post('/api/user/login', (req, res) => {
     let { username, password } = req.body
