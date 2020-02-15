@@ -24,10 +24,6 @@ app.use(express.json())
 
 let PORT = process.env.PORT || 1234
 
-client.query('select * from account', (err, data) => {
-    console.log(data.rows)
-})
-
 app.post('/api/user/login', (req, res) => {
     let { username, password } = req.body
     if (!(username && password)) {
