@@ -75,13 +75,15 @@ app.get('/api/posts', async (req, res) => {
 
 app.post('/api/posts', (req, res) => {
     let { name, topic, content } = req.body
-    client.query('INSERT INTO post(username,topic,content) VALUES ($1,$2,$3)', [name, topic, content],
-        (err) => {
+    client.query('INSERT INTO post(username,topic,content) VALUES ($1,$2,$3) RETURNING id', [name, topic, content],
+        (err,data) => {
             if (err) {
                 console.log(err.stack)
+            }else{
+                res.status(201).send(data.rows[0].id.toString())
             }
         })
-    res.status(201).send("Post created")
+    
 })
 
 app.get('/api/posts/:id', (req, res) => {
