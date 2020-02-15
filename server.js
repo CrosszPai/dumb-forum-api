@@ -32,17 +32,17 @@ app.post('/api/user/login', (req, res) => {
 
     client.query('SELECT * FROM account WHERE username=$1', [username], (err, data) => {
         if (err) {
-            res.json({ 'message': 'user not found' })
+            res.status(401).send('Unauthorized')
         }
         else if (data.rows[0] == undefined) {
-            res.json({ 'message': 'user not found' })
+            res.status(401).send('Unauthorized')
         }
         else {
             if (data.rows[0]['password'] != password) {
-                res.json({ 'message': 'password not matched' })
+                res.status(401).send('Unauthorized')
             }
             else {
-                res.json({ 'message': 'logged in' })
+                res.status(401).send('Unauthorized')
             }
         }
     })
@@ -56,7 +56,7 @@ app.post('/api/user', async (req, res) => {
             if (err) {
                 console.log(err.stack)
                 res.status(406).send("already has user")
-            }else{
+            } else {
                 res.status(201).send("User created")
             }
         })
