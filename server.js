@@ -6,11 +6,12 @@ let path = require('path')
 
 const { Client } = require('pg')
 const client = new Client({
-    host: 'ec2-3-234-109-123.compute-1.amazonaws.com',
-    user: 'avrrhvttuasjer',
-    password: '4e85ad72f51e0239d08abb7ae72018b19f609a0015454f6af2c775c4facc3462',
-    database: 'd4naqt4ilruq0e',
-    ssl: true
+    host: '13.76.33.58',
+    user: 'postgres',
+    password: 'P@$$',
+    database: 'TueKan',
+    ssl: true,
+    port: '5432'
 })
 
 client.connect()
@@ -22,6 +23,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 let PORT = process.env.PORT || 1234
+
+client.query('select * from account', (err, data) => {
+    console.log(data.rows)
+})
 
 app.post('/api/user/login', (req, res) => {
     let { username, password } = req.body
@@ -49,15 +54,18 @@ app.post('/api/user/login', (req, res) => {
 
 })
 
-app.post('/api/user', (req, res) => {
+app.post('/api/user', async (req, res) => {
     let { username, password } = req.body
-    client.query('INSERT INTO account(username,password) VALUES ($1,$2)', [username, password],
+    await client.query('INSERT INTO account(username,password) VALUES ($1,$2)', [username, password],
         (err) => {
             if (err) {
                 console.log(err.stack)
+                res.status(406).send("already has user")
+            }else{
+                res.status(201).send("User created")
             }
         })
-    res.status(201).send("User created")
+
 })
 
 app.get('/api/posts', async (req, res) => {
@@ -96,7 +104,7 @@ app.get('/api/posts/:id', (req, res) => {
             console.log(err.stack)
         } else {
             console.log(data.rows)
-            res.json({...forsend,comment:[...data.rows]})
+            res.json({ ...forsend, comment: [...data.rows] })
         }
     })
 })
